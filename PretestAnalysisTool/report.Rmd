@@ -1,0 +1,149 @@
+---
+title: "Pre-test Analysis Report"
+output: 
+  html_document:
+    toc: true
+    theme: flatly
+    highlight: tango
+  md_document:
+    variant: markdown_github
+params:
+  validity_scatter: NA
+  corr_heatmap: NA
+  scree_plot_res: NA
+  fa_res: NA
+  alpha_res: NA
+  dd_plot: NA
+  item_stat: NA
+  wright_map: NA
+  mirt_object: NA
+  item_fit: NA
+  desc_stats: NA
+  grm_indices: NA
+  grm_coefs: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.width = 10, fig.height = 6)
+library(ggplot2)
+library(mirt)
+library(psych)
+library(ShinyItemAnalysis)
+```
+
+# 1. 预试结果摘要 (Pre-test Summary)
+
+## 描述性统计 (Descriptive Statistics)
+```{r}
+if(!is.null(params$desc_stats)) {
+  # Select key columns
+  d <- params$desc_stats
+  d_clean <- d[, c("n", "mean", "sd", "min", "max", "skew", "kurtosis")]
+  knitr::kable(d_clean, digits = 2, caption = "Item Descriptive Statistics")
+}
+```
+
+## 整体拟合指数 (Global Fit Indices - GRM)
+```{r}
+if(!is.null(params$grm_indices)) {
+  knitr::kable(params$grm_indices, digits = 3, caption = "M2 Global Fit Indices")
+} else {
+  cat("Global fit indices (M2) could not be calculated.")
+}
+```
+
+## 项目参数 (Item Parameters - GRM)
+```{r}
+if(!is.null(params$grm_coefs)) {
+  knitr::kable(params$grm_coefs, digits = 3, caption = "GRM Item Parameters (a = Discrimination, b = Thresholds)")
+}
+```
+
+# 2. 效度分析 (Validity Analysis)
+
+## 预测效度 (Criterion Validity)
+```{r}
+if(!is.null(params$validity_scatter)) {
+  print(params$validity_scatter)
+} else {
+  cat("No valid criterion variable selected or data unavailable.")
+}
+```
+
+## 结构效度 (Construct Validity)
+
+### 多格相关热图 (Polychoric Correlation Heatmap)
+```{r}
+if(!is.null(params$corr_heatmap)) {
+  print(params$corr_heatmap)
+}
+```
+
+### 碎石图 (Scree Plot)
+```{r}
+if(!is.null(params$scree_plot_res)) {
+  plot(params$scree_plot_res)
+}
+```
+
+### 因子路径图 (Factor Diagram)
+```{r}
+if(!is.null(params$fa_res)) {
+  psych::fa.diagram(params$fa_res)
+}
+```
+
+# 3. 信度分析 (Reliability Analysis)
+
+## 内部一致性 (Internal Consistency)
+```{r}
+if(!is.null(params$alpha_res)) {
+  print(params$alpha_res)
+}
+```
+
+# 4. 项目分析 (Classical Test Theory)
+
+## 难度与区分度图 (Difficulty & Discrimination)
+```{r}
+if(!is.null(params$dd_plot)) {
+  print(params$dd_plot)
+}
+```
+
+## 项目统计表 (Item Statistics)
+```{r}
+if(!is.null(params$item_stat)) {
+  knitr::kable(params$item_stat, digits = 3)
+}
+```
+
+# 5. IRT 分析 (Item Response Theory)
+
+## 怀特图 (Wright Map)
+```{r}
+if(!is.null(params$wright_map)) {
+  print(params$wright_map)
+}
+```
+
+## 项目特征曲线 (ICC)
+```{r}
+if(!is.null(params$mirt_object)) {
+  plot(params$mirt_object, type = "trace", facet_items = FALSE)
+}
+```
+
+## 测验信息函数 (TIF)
+```{r}
+if(!is.null(params$mirt_object)) {
+  plot(params$mirt_object, type = "infoSE")
+}
+```
+
+## 项目拟合统计量 (Item Fit)
+```{r}
+if(!is.null(params$item_fit)) {
+  knitr::kable(params$item_fit, digits = 3)
+}
+```

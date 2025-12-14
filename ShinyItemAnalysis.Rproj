@@ -22,5 +22,3 @@ PackageCheckArgs: --as-cran --no-manual
 PackageRoxygenize: rd,collate,namespace
 
 QuitChildProcessesOnExit: Yes
-
-ProjectName: SIA
