@@ -21,6 +21,7 @@ params:
   desc_stats: NA
   grm_indices: NA
   grm_coefs: NA
+  item_conclusion: NA
 ---
 
 ```{r setup, include=FALSE}
@@ -32,6 +33,14 @@ library(ShinyItemAnalysis)
 ```
 
 # 1. 预试结果摘要 (Pre-test Summary)
+
+## 项目质量评估与结论 (Item Conclusion)
+综合CTT与IRT指标的题目分析汇总与建议。
+```{r}
+if(!is.null(params$item_conclusion)) {
+  knitr::kable(params$item_conclusion, digits = 3, caption = "Item Evaluation Summary")
+}
+```
 
 ## 描述性统计 (Descriptive Statistics)
 ```{r}
